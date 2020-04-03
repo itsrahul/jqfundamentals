@@ -1,6 +1,3 @@
-console.log('object :', $('div#blog ul')); 
-
-
 $('div#blog ul').children().each(function(){
 
   $(this).on("click", function() {
