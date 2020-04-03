@@ -1,4 +1,4 @@
-$('div#blog ul').children().each(function(){
+$('div#blog ul li').each(function(){
 
   $(this).on("click", function() {
 
