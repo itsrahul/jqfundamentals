@@ -1,5 +1,3 @@
-let x = $("div#header #nav");
-
 $("#nav").children().each(function(){
   
   $(this).hover(
