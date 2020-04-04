@@ -1,19 +1,22 @@
-let $mod = $("div.module");
+$(document).ready(function() {
 
-$mod.hide();
+  let $mod = $("div.module").hide();
+  let $list = $('<ul>').text('New List');
+  $list.insertBefore($mod.first());
 
-let $list = $("<ul> New List </ul>").insertBefore($mod.first());
+  $mod.each(function(){
 
-$mod.each(function(){
+    let text = $(this).find('h2').prop("innerHTML");
+    let $item = $('<li>').text(`${text}`);
+    $item.appendTo($list);
 
-  let item = $(`<li> ${$(this).find('h2').prop("innerHTML")} </li>`).appendTo($list);
+    let $_this = $(this);
 
-  let $_this = $(this);
-  
-  item.on("click", function() {
-    $_this.show().siblings(".module").hide();
-    $(this).addClass("current").siblings().removeClass("current")
-  })
-})
+    $item.on("click", function() {
+      $_this.show().siblings(".module").hide();
+      $(this).addClass("current").siblings().removeClass("current")
+    })
+  });
 
-$mod.first().show();
+  $mod.first().show();
+});
