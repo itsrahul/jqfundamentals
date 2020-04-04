@@ -1,3 +1,5 @@
+$(document).ready(function() {
+
 $("#nav").children().each(function(){
   
   $(this).hover(
@@ -10,3 +12,5 @@ $("#nav").children().each(function(){
   );
 
 })
+
+});
