@@ -1,32 +1,52 @@
 $(document).ready(function() {
-  
-  let $list = $("ul#slideshow");
-  let $main = $("div#main");
 
-  $main.prepend($list);
-  
-  $list.find("li").each(function(){
-    $(this).hide();
-  });
-
-  $("ul#slideshow li:first").show().addClass("slide");
-  
-  setInterval(function(){
-    let displayed = $("ul#slideshow li.slide");
-
-    if(displayed.prop("nextElementSibling") == null)
+  class SlideShow
+  {
+    constructor(listItem, position)
     {
-      $(displayed).removeClass("slide").fadeOut(400, "linear", function(){
-        $(displayed).prevUntil("ul").last().fadeIn(400, "linear").addClass("slide");
-      })
+      this.item = $(listItem);
+      this.main = $(position);
+
     }
-    else
+    startSlideshow()
     {
-      $(displayed).removeClass("slide").fadeOut(400, "linear", function(){
-        $(displayed.prop("nextElementSibling")).fadeIn(400, "linear").addClass("slide");
+      this.main.prepend(this.item);
+      this.item.find("li").each(function(){
+        $(this).hide();
       });
+
+      this.item.find("li:first").show().addClass("onDisplay");
+
+      this.runSlideshow();
     }
 
-  }, 4000);
+    runSlideshow()
+    {
+      setInterval( () => {
+        let displayed = $(this.item.find("li.onDisplay"));
+    
+        if(displayed.prop("nextElementSibling") == null)
+        {
+          this.displayNext(displayed, displayed.prevUntil("ul").last() );
+        }
+        else
+        {
+          this.displayNext(displayed, $(displayed.prop("nextElementSibling")) );
+        }
+    
+      }, 4000);
+    }
 
+    displayNext(hideItem, showItem)
+    {
+      hideItem.removeClass("onDisplay").fadeOut( function(){
+          showItem.fadeIn().addClass("onDisplay");
+        });
+    }
+    
+  }
+
+  let slideshowList = new SlideShow("ul#slideshow", "div#main");
+  slideshowList.startSlideshow();
+ 
 })
