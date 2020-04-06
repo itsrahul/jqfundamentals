@@ -1,41 +1,48 @@
 $(document).ready(function() {
 
-  let specialsForm = $("form[action='specials.html']")
-  specialsForm.find('li.buttons').remove();
-  
-  let localDiv = $("<div>").addClass("new");
-  localDiv.insertAfter(specialsForm);
-  
-  function displayResult(data, day)
+  class GetData
   {
-    let offer = data[day];
-  
-    let title = $("<h3>").text(`${offer.title}`);
-    let details = $("<p>").text(`${offer.text}`);
-    let img = $("<img>").prop("src", `${offer.image}`);
-  
-    localDiv.prop("innerHTML", "");
-    title.appendTo(localDiv);
-    details.appendTo(localDiv);
-    img.appendTo(localDiv);
-  
-  
+    constructor(form)
+    {
+      this.specialsForm = $(form);      
+      this.localDiv = $("<div>");
+      this.specialsForm.find('li.buttons').remove();
+      this.localDiv.insertAfter(this.specialsForm);
+    }
+
+    displayResult(data, day)
+    {
+      if(day)
+      {
+        let offer = data[day];
+        let title = $("<h3>").text(`${offer.title}`);
+        let details = $("<p>").text(`${offer.text}`);
+        let img = $("<img>").prop("src", `${offer.image}`);
+        this.localDiv
+          .prop("innerHTML", "")
+          .append(title)
+          .append(details)
+          .append(img)
+          .css('color', offer.color);;
+      }
+    }
+
+    loadDataFrom(jsonUrl)
+    {
+      this.specialsForm.on("change", () =>
+      {
+        let day = $(event.target).val();
+        $.ajax({
+          url: jsonUrl,
+          type: "get",
+          dataType: "json",
+          success: (data) => {
+            this.displayResult(data, day);
+          }
+        });
+      });
+    }
   }
-  
-  specialsForm.on("change", function()
-  {
-    let day = $(event.target).val();
-  
-    $.ajax({
-      url: "data/specials.json",
-      type: "get",
-      dataType: "json",
-      success: function(data){
-        displayResult(data, day);
-      }    
-    });
-  
-  });
-  
-  
-});    
+  let specials = new GetData("form[action='specials.html']");
+  specials.loadDataFrom("data/specials.json");
+});
