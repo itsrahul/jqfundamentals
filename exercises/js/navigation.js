@@ -1,4 +1,3 @@
-$(document).ready(function() {
 class HoverChildren
 {
   constructor(parentElement)
@@ -8,25 +7,23 @@ class HoverChildren
 
   addHover()
   {
-    for(let item of this.childrenElements)
-    {
-      $(item).hover( () => this.hoverIn(item), () => this.hoverOut(item) );
-    }
+    this.childrenElements.each((_i, element) => {
+      $(element).hover( () => this.hoverIn(), () => this.hoverOut() );
+    })
   }
 
-  hoverIn(item)
+  hoverIn()
   {
-    $(item).addClass("selected").find('ul').show();
+    $(event.target).addClass("selected").find('ul').show();
   }
 
-  hoverOut(item)
+  hoverOut()
   {
-    $(item).removeClass("selected").find('ul').hide();
+    $(event.target).removeClass("selected").find('ul').hide();
   }
-
 };
 
-let navBar = new HoverChildren("#nav");
-navBar.addHover();
-
+$(document).ready(function() {
+  let navBar = new HoverChildren("#nav");
+  navBar.addHover();
 });
