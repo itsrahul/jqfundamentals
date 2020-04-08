@@ -7,9 +7,7 @@ class HoverChildren
 
   addHover()
   {
-    this.childrenElements.each((_i, element) => {
-      $(element).hover( () => this.hoverIn(), () => this.hoverOut() );
-    })
+    this.childrenElements.hover( () => this.hoverIn(), () => this.hoverOut() );
   }
 
   hoverIn()
