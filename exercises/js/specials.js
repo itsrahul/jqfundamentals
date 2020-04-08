@@ -8,23 +8,6 @@ class GetData
     this.localDiv.insertAfter(this.specialsForm);
   }
 
-  displayResult(data, day)
-  {
-    if(day)
-    {
-      let offer = data[day];
-      let title = $("<h3>").text(`${offer.title}`);
-      let details = $("<p>").text(`${offer.text}`);
-      let img = $("<img>").prop("src", `${offer.image}`);
-      this.localDiv
-        .prop("innerHTML", "")
-        .append(title)
-        .append(details)
-        .append(img)
-        .css('color', offer.color);
-    }
-  }
-
   loadDataFrom(jsonUrl)
   {
     this.specialsForm.on("change", () =>
@@ -35,7 +18,19 @@ class GetData
         type: "get",
         dataType: "json",
         success: (data) => {
-          this.displayResult(data, day);
+          if(day)
+          {
+            let offer = data[day];
+            let title = $("<h3>").text(`${offer.title}`);
+            let details = $("<p>").text(`${offer.text}`);
+            let img = $("<img>").prop("src", `${offer.image}`);
+            this.localDiv
+              .prop("innerHTML", "")
+              .append(title)
+              .append(details)
+              .append(img)
+              .css('color', offer.color);
+          }
         }
       });
     });
