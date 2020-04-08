@@ -1,53 +1,57 @@
 class SlideShow
 {
-  constructor(listItem, position)
+  constructor(details)
   {
-    this.item = $(listItem);
-    this.main = $(position);
+    this.main = details.displayElement;
+    this.item = details.slideshowElement;
+    this.displayClass = details.className;
+    this.displayed = null;
+    this.toBeDisplayed = null;
   }
+
   startSlideshow()
   {
     this.main.prepend(this.item);
-    this.item.children().each(function()
-    {
-      $(this).hide();
-    });
-
-    this.item
-      .find("li:first")
-      .show()
-      .addClass("onDisplay");
+    this.item.children()
+      .hide()
+      .first().show().addClass(this.displayClass);
     this.runSlideshow();
   }
 
   runSlideshow()
   {
-    setInterval( () => {
-      let displayed = $(this.item.find("li.onDisplay"));
-      if(displayed.prop("nextElementSibling") == null)
-      {
-        this.displayNext(displayed, displayed.parent().prop("firstElementChild") );
-      }
-      else
-      {
-        this.displayNext(displayed, displayed.prop("nextElementSibling") );
-      }
-    }, 4000);
-  }
+    this.displayed = $(this.item.find("li." + this.displayClass));
 
-  displayNext(hideItem, showItem)
-  {
-    hideItem
-      .removeClass("onDisplay")
+    if(this.displayed.prop("nextElementSibling") == null)
+    {
+      this.toBeDisplayed = this.displayed.parent().prop("firstElementChild");
+    }
+    else
+    {
+      this.toBeDisplayed = this.displayed.prop("nextElementSibling");
+    }
+
+    this.displayed
+      .removeClass(this.displayClass)
       .fadeOut()
       .promise()
-      .done(function(){
-        $(showItem).fadeIn().addClass("onDisplay");
+      .done(() => {
+        $(this.toBeDisplayed)
+          .addClass(this.displayClass)
+          .fadeIn()
+          .delay(4000)
+          .promise()
+          .done( this.runSlideshow());
       });
   }
 }
 
 $(document).ready(function() {
-  let slideshowList = new SlideShow("ul#slideshow", "div#main");
+  let details = {
+    displayElement: $("div#main"),
+    slideshowElement: $("ul#slideshow"),
+    className: "onDisplay",
+  }
+  let slideshowList = new SlideShow(details);
   slideshowList.startSlideshow();
-})
+});
