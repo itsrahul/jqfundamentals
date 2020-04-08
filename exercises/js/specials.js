@@ -7,6 +7,19 @@ class GetData
     this.specialsForm.find('li.buttons').remove();
     this.localDiv.insertAfter(this.specialsForm);
   }
+  displayResult(data, day)
+  {
+    let offer = data[day];
+    let title = $("<h3>").text(`${offer.title}`);
+    let details = $("<p>").text(`${offer.text}`);
+    let img = $("<img>").prop("src", `${offer.image}`);
+    this.localDiv
+      .prop("innerHTML", "")
+      .append(title)
+      .append(details)
+      .append(img)
+      .css('color', offer.color);
+  }
 
   loadDataFrom(jsonUrl)
   {
@@ -20,16 +33,7 @@ class GetData
         success: (data) => {
           if(day)
           {
-            let offer = data[day];
-            let title = $("<h3>").text(`${offer.title}`);
-            let details = $("<p>").text(`${offer.text}`);
-            let img = $("<img>").prop("src", `${offer.image}`);
-            this.localDiv
-              .prop("innerHTML", "")
-              .append(title)
-              .append(details)
-              .append(img)
-              .css('color', offer.color);
+            this.displayResult(data, day);
           }
         }
       });
