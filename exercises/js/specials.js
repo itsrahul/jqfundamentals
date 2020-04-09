@@ -2,29 +2,28 @@ class GetData
 {
   constructor(form)
   {
-    this.specialsForm = $(form);      
+    this.specialsForm = $(form);
     this.localDiv = $("<div>");
     this.specialsForm.find('li.buttons').remove();
     this.localDiv.insertAfter(this.specialsForm);
   }
-  displayResult(data, day)
+
+  displayResult(offerDetails)
   {
-    let offer = data[day];
-    let title = $("<h3>").text(`${offer.title}`);
-    let details = $("<p>").text(`${offer.text}`);
-    let img = $("<img>").prop("src", `${offer.image}`);
+    let title = $("<h3>").text(`${offerDetails.title}`);
+    let details = $("<p>").text(`${offerDetails.text}`);
+    let img = $("<img>").prop("src", `${offerDetails.image}`);
     this.localDiv
       .prop("innerHTML", "")
       .append(title)
       .append(details)
       .append(img)
-      .css('color', offer.color);
+      .css('color', offerDetails.color);
   }
 
   loadDataFrom(jsonUrl)
   {
-    this.specialsForm.on("change", () =>
-    {
+    this.specialsForm.on("change", () => {
       let day = $(event.target).val();
       $.ajax({
         url: jsonUrl,
@@ -33,7 +32,7 @@ class GetData
         success: (data) => {
           if(day)
           {
-            this.displayResult(data, day);
+            this.displayResult(data[day]);
           }
         }
       });
